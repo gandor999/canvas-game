@@ -1,4 +1,4 @@
-import getStopHeight from './getStopHeight.js'
+import getStopPos from './getStopPos.js'
 
 export default class Ball {
   constructor({ ctx, outerColor, outerThickness, innerColor, pos, radius, initVelocity }) {
@@ -6,7 +6,7 @@ export default class Ball {
     this.outerColor = outerColor
     this.pos = pos
     this.radius = radius
-    this.initVelocity = initVelocity
+    this.velocity = initVelocity
 
     this.ctx.fillStyle = innerColor
     this.ctx.lineWidth = outerThickness
@@ -27,16 +27,37 @@ export default class Ball {
   }
 
   animate() {
-    const height = this.ctx.canvas.clientHeight
+    const { clientHeight, clientWidth } = this.ctx.canvas
 
-    const stopHeight = getStopHeight(height, this.radius)
+    const heightStopBottom = getStopPos(clientHeight, this.radius)
+    const heightStopTop = this.radius
+    const widthStopRight = getStopPos(clientWidth, this.radius)
+    const widthtStopLeft = this.radius
 
+    const friction = 0.04
+    const gravity = 0.2
+    const bounce = Math.sqrt(2.3 * gravity)
+
+    // -0.75 is our bounce
+    // .1 is our gravity acceleration
     setInterval(() => {
-      this.pos.y > stopHeight ? (this.initVelocity.yV *= -0.75) : (this.initVelocity.yV += 0.17)
-      // -0.75 is our bounce
-      // .17 is our gravity acceleration
+      console.log('velocity', this.velocity)
+      this.pos.y > heightStopBottom ? (this.velocity.yV *= -bounce) : (this.velocity.yV += gravity)
 
-      this.move(this.initVelocity)
+      if (this.velocity.xV < friction && this.velocity.xV > -friction) {
+        this.velocity.xV = 0
+      } else {
+        this.pos.x < 0 ? (this.velocity.xV += friction) : (this.velocity.xV -= friction)
+      }
+
+      if (this.pos.y < heightStopTop) this.velocity.yV *= -bounce
+      if (this.pos.x > widthStopRight) this.velocity.xV *= -bounce
+
+      if (this.pos.x < widthtStopLeft) this.velocity.xV *= -bounce
+
+      // ADDNEXT: make the ball bounce off the ceiling as well as the right and left wall
+
+      this.move(this.velocity)
     }, 17)
   }
 }
