@@ -6,13 +6,15 @@ export default class Ball {
     this.pos = pos
     this.radius = radius
     this.velocity = initVelocity
-
-    this.ctx.fillStyle = innerColor
-    this.ctx.lineWidth = outerThickness
+    this.innerColor = innerColor
+    this.outerThickness = outerThickness
+    
     this.turnOnPhysics()
   }
 
   spawn() {
+    this.ctx.fillStyle = this.innerColor
+    this.ctx.lineWidth = this.outerThickness
     this.ctx.beginPath()
     this.ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI)
     this.ctx.fill()
@@ -49,6 +51,7 @@ export default class Ball {
     const widthStopRight = getStopPos(clientWidth, this.radius)
     const widthtStopLeft = this.radius
 
+    // logic for gravity and bouncing on bottom
     if (this.pos.y > heightStopBottom) {
       this.velocity.yV < this.bounce && this.velocity.yV >= 0
         ? (this.velocity.yV = 0)
