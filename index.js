@@ -14,7 +14,7 @@ function createHiPPICanvas(width, height) {
 }
 
 function setupCanvas() {
-  const canvas = createHiPPICanvas(500, 300)
+  const canvas = createHiPPICanvas(700, 500)
 
   const world = new World(canvas)
 

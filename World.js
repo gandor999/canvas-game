@@ -33,7 +33,7 @@ export default class World {
       innerColor: '#44CCFF',
       outerThickness: 1,
       pos: { x: 20, y: 20 },
-      radius: 10,
+      radius: 15,
       initVelocity: { xV: 100, yV: 150 },
     })
 
