@@ -3,9 +3,9 @@ export default function isPointInsideBallArea(
   { x: circleX, y: circleY, radius }
 ) {
   return (
-    mouseX > circleX ||
-    mouseX < circleX + 2 * radius ||
-    mouseY < circleY ||
+    mouseX > circleX &&
+    mouseX < circleX + 2 * radius &&
+    mouseY < circleY &&
     mouseY > circleY - 2 * radius
   )
 }
