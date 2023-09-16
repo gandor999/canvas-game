@@ -32,9 +32,9 @@ export default class World {
       canvas: this.canvas,
       innerColor: '#44CCFF',
       outerThickness: 1,
-      pos: { x: 10, y: 10 },
+      pos: { x: 20, y: 20 },
       radius: 10,
-      initVelocity: { xV: 10, yV: 15 },
+      initVelocity: { xV: 100, yV: 150 },
     })
 
     const gameObjects = [ball]

@@ -38,7 +38,7 @@ export default class Ball {
   }
 
   turnOnPhysics() {
-    ;(this.friction = 0.04), (this.gravity = 0.2), (this.bounce = Math.sqrt(2.3 * this.gravity))
+    ;(this.friction = 0.04), (this.gravity = 0.2), (this.bounce = Math.sqrt(2 * this.gravity))
   }
 
   animate() {
@@ -49,9 +49,13 @@ export default class Ball {
     const widthStopRight = getStopPos(clientWidth, this.radius)
     const widthtStopLeft = this.radius
 
-    this.pos.y > heightStopBottom
-      ? (this.velocity.yV *= -this.bounce)
-      : (this.velocity.yV += this.gravity)
+    if (this.pos.y > heightStopBottom) {
+      this.velocity.yV < this.bounce && this.velocity.yV >= 0
+        ? (this.velocity.yV = 0)
+        : ((this.pos.y = heightStopBottom), (this.velocity.yV *= -this.bounce))
+    } else {
+      this.velocity.yV += this.gravity
+    }
 
     if (this.velocity.xV < this.friction && this.velocity.xV > -this.friction) {
       this.velocity.xV = 0
@@ -59,10 +63,12 @@ export default class Ball {
       this.pos.x < 0 ? (this.velocity.xV += this.friction) : (this.velocity.xV -= this.friction)
     }
 
-    if (this.pos.y < heightStopTop) this.velocity.yV *= -this.bounce
-    if (this.pos.x > widthStopRight) this.velocity.xV *= -this.bounce
+    if (this.pos.y < heightStopTop) (this.pos.y = heightStopTop), (this.velocity.yV *= -this.bounce)
+    if (this.pos.x > widthStopRight)
+      (this.pos.x = widthStopRight), (this.velocity.xV *= -this.bounce)
 
-    if (this.pos.x < widthtStopLeft) this.velocity.xV *= -this.bounce
+    if (this.pos.x < widthtStopLeft)
+      (this.pos.x = widthtStopLeft), (this.velocity.xV *= -this.bounce)
 
     this.move(this.velocity)
   }
