@@ -1,8 +1,8 @@
 import getStopPos from './getStopPos.js'
 
 export default class Ball {
-  constructor({ ctx, outerColor, outerThickness, innerColor, pos, radius, initVelocity }) {
-    this.ctx = ctx
+  constructor({ canvas, outerColor, outerThickness, innerColor, pos, radius, initVelocity }) {
+    ;(this.canvas = canvas), (this.ctx = this.canvas.getContext('2d'))
     this.outerColor = outerColor
     this.pos = pos
     this.radius = radius
@@ -22,7 +22,6 @@ export default class Ball {
   }
 
   move({ xV = 0, yV = 0 }) {
-    this.ctx.clearRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight)
     ;(this.pos.x += xV), (this.pos.y += yV), this.spawn()
   }
 
@@ -38,26 +37,19 @@ export default class Ball {
     const gravity = 0.2
     const bounce = Math.sqrt(2.3 * gravity)
 
-    // -0.75 is our bounce
-    // .1 is our gravity acceleration
-    setInterval(() => {
-      console.log('velocity', this.velocity)
-      this.pos.y > heightStopBottom ? (this.velocity.yV *= -bounce) : (this.velocity.yV += gravity)
+    this.pos.y > heightStopBottom ? (this.velocity.yV *= -bounce) : (this.velocity.yV += gravity)
 
-      if (this.velocity.xV < friction && this.velocity.xV > -friction) {
-        this.velocity.xV = 0
-      } else {
-        this.pos.x < 0 ? (this.velocity.xV += friction) : (this.velocity.xV -= friction)
-      }
+    if (this.velocity.xV < friction && this.velocity.xV > -friction) {
+      this.velocity.xV = 0
+    } else {
+      this.pos.x < 0 ? (this.velocity.xV += friction) : (this.velocity.xV -= friction)
+    }
 
-      if (this.pos.y < heightStopTop) this.velocity.yV *= -bounce
-      if (this.pos.x > widthStopRight) this.velocity.xV *= -bounce
+    if (this.pos.y < heightStopTop) this.velocity.yV *= -bounce
+    if (this.pos.x > widthStopRight) this.velocity.xV *= -bounce
 
-      if (this.pos.x < widthtStopLeft) this.velocity.xV *= -bounce
+    if (this.pos.x < widthtStopLeft) this.velocity.xV *= -bounce
 
-      // ADDNEXT: make the ball bounce off the ceiling as well as the right and left wall
-
-      this.move(this.velocity)
-    }, 17)
+    this.move(this.velocity)
   }
 }
