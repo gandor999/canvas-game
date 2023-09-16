@@ -33,11 +33,20 @@ export default class World {
       innerColor: '#44CCFF',
       outerThickness: 1,
       pos: { x: 20, y: 20 },
-      radius: 15,
+      radius: 20,
       initVelocity: { xV: 100, yV: 150 },
     })
 
-    const gameObjects = [ball]
+    const ball2 = new Ball({
+      canvas: this.canvas,
+      innerColor: '#E0FF4F',
+      outerThickness: 1,
+      pos: { x: 50, y: 100 },
+      radius: 10,
+      initVelocity: { xV: 20, yV: 19 },
+    })
+
+    const gameObjects = [ball, ball2]
 
     this.spawnObjects(gameObjects)
 
