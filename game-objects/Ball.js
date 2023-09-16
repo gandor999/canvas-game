@@ -8,10 +8,11 @@ export default class Ball {
     this.velocity = initVelocity
     this.innerColor = innerColor
     this.outerThickness = outerThickness
-    
+
     this.turnOnPhysics()
   }
 
+  // note: a canvas element only has one context all throughout so the reason why you could not get the innerColor of the first ball to be retained is because the ctx object that has been passed down has been the same! To fix this we need to think of the properties of the ball to be that of when we will draw it on the canvas
   spawn() {
     this.ctx.fillStyle = this.innerColor
     this.ctx.lineWidth = this.outerThickness
@@ -60,12 +61,14 @@ export default class Ball {
       this.velocity.yV += this.gravity
     }
 
+    // logic for slowing down due to friction
     if (this.velocity.xV < this.friction && this.velocity.xV > -this.friction) {
       this.velocity.xV = 0
     } else {
       this.pos.x < 0 ? (this.velocity.xV += this.friction) : (this.velocity.xV -= this.friction)
     }
 
+    // logic for the rest of the bouncing
     if (this.pos.y < heightStopTop) (this.pos.y = heightStopTop), (this.velocity.yV *= -this.bounce)
     if (this.pos.x > widthStopRight)
       (this.pos.x = widthStopRight), (this.velocity.xV *= -this.bounce)
