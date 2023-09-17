@@ -10,6 +10,8 @@ export default class Ball {
     this.outerThickness = outerThickness
 
     this.turnOnPhysics()
+    this.thisObjectIsHeld = false
+    this.isOtherObjectHeld = false
   }
 
   // note: a canvas element only has one context all throughout so the reason why you could not get the innerColor of the first ball to be retained is because the ctx object that has been passed down has been the same! To fix this we need to think of the properties of the ball to be that of when we will draw it on the canvas
