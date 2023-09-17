@@ -2,10 +2,8 @@ export default function isPointInsideBallArea(
   { mouseX, mouseY },
   { x: circleX, y: circleY, radius }
 ) {
-  return (
-    mouseX > circleX &&
-    mouseX < circleX + 2 * radius &&
-    mouseY < circleY &&
-    mouseY > circleY - 2 * radius
+  const distanceBetweenCenters = Math.sqrt(
+    (mouseX - circleX) * (mouseX - circleX) + (mouseY - circleY) * (mouseY - circleY)
   )
+  return distanceBetweenCenters <= radius
 }
