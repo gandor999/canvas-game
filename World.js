@@ -1,4 +1,6 @@
 import Border from './Border.js'
+import CollisionDetector from './CollisionDetector.js'
+import ObjectIsHeldChecker from './ObjectIsHeldChecker.js'
 import Ball from './game-objects/Ball.js'
 import listenForMouse from './util/listenForMouse.js'
 
@@ -9,6 +11,8 @@ export default class World {
   }
 
   playWorld(gameObjects) {
+    const collisionDetector = new CollisionDetector(gameObjects)
+
     requestAnimationFrame(() => {
       this.playWorld(gameObjects)
     }, canvas)
@@ -16,6 +20,8 @@ export default class World {
     gameObjects.forEach(gameObject => {
       gameObject.animate()
     })
+
+    collisionDetector.listenCollisions()
   }
 
   spawnObjects(gameObjects) {
