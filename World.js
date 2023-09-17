@@ -61,8 +61,16 @@ export default class World {
 
     this.playWorld(gameObjects)
 
-    gameObjects.forEach(gameObject => {
-      listenForMouse(this.canvas, gameObject)
+    const objectIsHeldChecker = new ObjectIsHeldChecker()
+
+    gameObjects.forEach((gameObject, indexOfObject, gameObjects) => {
+      listenForMouse({
+        canvas: this.canvas,
+        gameObject,
+        objectIsHeldChecker,
+        indexOfObject,
+        gameObjects,
+      })
     })
   }
 }
