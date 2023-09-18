@@ -1,13 +1,14 @@
 import Border from './Border.js'
 import CollisionDetector from './CollisionDetector.js'
 import ObjectIsHeldChecker from './ObjectIsHeldChecker.js'
-import Ball from './game-objects/Ball.js'
+import Ball from './game-object-classes/Ball.js'
 import listenForMouse from './util/listenForMouse.js'
+import ballsRoster from './game-object-roster/ballsRoster.js'
 
 export default class World {
   constructor(canvas) {
     this.canvas = canvas
-    this.ctx = this.canvas.getContext('2d')
+    this.ctx = canvas.getContext('2d')
   }
 
   playWorld(gameObjects) {
@@ -34,34 +35,15 @@ export default class World {
     const border = new Border(this.canvas, this.ctx)
     border.draw()
 
-    const ball = new Ball({
-      canvas: this.canvas,
-      innerColor: '#44CCFF',
-      outerThickness: 1,
-      pos: { x: 20, y: 20 },
-      radius: 20,
-      initVelocity: { xV: 100, yV: 150 },
-    })
+    const gameBalls = ballsRoster.map(
+      ball =>
+        new Ball({
+          canvas: this.canvas,
+          ...ball,
+        })
+    )
 
-    const ball2 = new Ball({
-      canvas: this.canvas,
-      innerColor: '#E0FF4F',
-      outerThickness: 1,
-      pos: { x: 50, y: 100 },
-      radius: 10,
-      initVelocity: { xV: 20, yV: 19 },
-    })
-
-    const ball3 = new Ball({
-      canvas: this.canvas,
-      innerColor: '#ED6A5A',
-      outerThickness: 1,
-      pos: { x: 60, y: 100 },
-      radius: 60,
-      initVelocity: { xV: 100, yV: 19 },
-    })
-
-    const gameObjects = [ball, ball2, ball3]
+    const gameObjects = [...gameBalls]
 
     this.spawnObjects(gameObjects)
 
