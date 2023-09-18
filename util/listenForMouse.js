@@ -1,4 +1,4 @@
-import isPointInsideBallArea from './isPointInsideBallArea.js'
+import CollisionDetector from '../CollisionDetector.js'
 
 export default function listenForMouse({
   canvas,
@@ -7,11 +7,16 @@ export default function listenForMouse({
   indexOfObject,
   gameObjects,
 }) {
-  // if we rely soley on isPointInsideBallArea to hold the ball the ball wont hold on right
+  // if we rely soley on isMousePointInsideBallArea to hold the ball the ball wont hold on right
   let holdingBall = false
+  const collisionDetector = new CollisionDetector()
+
   const onMouseMove = e => {
     if (
-      (isPointInsideBallArea({ mouseX: e.pageX, mouseY: e.pageY }, gameObject.getBallPos()) &&
+      (collisionDetector.isMousePointInsideBallArea(
+        { mouseX: e.pageX, mouseY: e.pageY },
+        gameObject.getBallPos()
+      ) &&
         !objectIsHeldChecker.isThereAnotherObjectHeld(gameObjects, indexOfObject)) ||
       holdingBall
     ) {

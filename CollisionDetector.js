@@ -1,23 +1,32 @@
-const areCirclesTouching = (ballI, ballJ) => {
-  const { x: xi, y: yi, radius: radiusi } = ballI.getBallPos()
-  const { x: xj, y: yj, radius: radiusj } = ballJ.getBallPos()
-
-  // Math.pow is so slow, let's just square them naively instead
-  const distanceBetweenCenters = Math.sqrt((xi - xj) * (xi - xj) + (yi - yj) * (yi - yj))
-
-  return (
-    distanceBetweenCenters <= radiusi - radiusj ||
-    distanceBetweenCenters <= radiusj - radiusi ||
-    distanceBetweenCenters <= radiusi + radiusj
-  )
-}
+import getStopPos from './util/getStopPos.js'
 
 export default class CollisionDetector {
   constructor(gameObjects) {
     this.gameObjects = gameObjects
   }
 
-  listenCollisions() {
+  isMousePointInsideBallArea({ mouseX, mouseY }, { x: circleX, y: circleY, radius }) {
+    const distanceBetweenCenters = Math.sqrt(
+      (mouseX - circleX) * (mouseX - circleX) + (mouseY - circleY) * (mouseY - circleY)
+    )
+    return distanceBetweenCenters <= radius
+  }
+
+  areCirclesTouching = (ballI, ballJ) => {
+    const { x: xi, y: yi, radius: radiusi } = ballI.getBallPos()
+    const { x: xj, y: yj, radius: radiusj } = ballJ.getBallPos()
+
+    // Math.pow is so slow, let's just square them naively instead
+    const distanceBetweenCenters = Math.sqrt((xi - xj) * (xi - xj) + (yi - yj) * (yi - yj))
+
+    return (
+      distanceBetweenCenters <= radiusi - radiusj ||
+      distanceBetweenCenters <= radiusj - radiusi ||
+      distanceBetweenCenters <= radiusi + radiusj
+    )
+  }
+
+  listenCollisionsBetweenBallObjects = () => {
     for (let i = 0; i < this.gameObjects.length; i++) {
       const gameObjectI = this.gameObjects[i]
 
@@ -27,11 +36,12 @@ export default class CollisionDetector {
         const gameObjectJ = this.gameObjects[j]
 
         // ADDNEXT: collision detection for rect vs rect, circle vs rect
-        if (areCirclesTouching(gameObjectI, gameObjectJ)) {
-            console.log("balls are touching!")
+        if (this.areCirclesTouching(gameObjectI, gameObjectJ)) {
+          console.log('balls are touching!')
         }
       }
     }
+  }
 
   // NOTE: should I make a CollisionHandler class instead
   handleCollisionsFromBallToWall = ({ ball, clientHeight, clientWidth }) => {

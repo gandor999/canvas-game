@@ -21,7 +21,7 @@ export default class World {
       gameObject.animate()
     })
 
-    collisionDetector.listenCollisions()
+    collisionDetector.listenCollisionsBetweenBallObjects()
   }
 
   spawnObjects(gameObjects) {
