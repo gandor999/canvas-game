@@ -32,5 +32,38 @@ export default class CollisionDetector {
         }
       }
     }
+
+  // NOTE: should I make a CollisionHandler class instead
+  handleCollisionsFromBallToWall = ({ ball, clientHeight, clientWidth }) => {
+    const heightStopBottom = getStopPos(clientHeight, ball.radius)
+    const heightStopTop = ball.radius
+    const widthStopRight = getStopPos(clientWidth, ball.radius)
+    const widthtStopLeft = ball.radius
+
+    // logic for gravity and bouncing on bottom
+    if (ball.pos.y > heightStopBottom) {
+      ball.velocity.yV < ball.bounce && ball.velocity.yV >= 0
+        ? (ball.velocity.yV = 0)
+        : ((ball.pos.y = heightStopBottom), (ball.velocity.yV *= -ball.bounce))
+    } else {
+      ball.velocity.yV += ball.gravity
+    }
+
+    // logic for slowing down due to friction
+    if (ball.velocity.xV < ball.friction && ball.velocity.xV > -ball.friction) {
+      ball.velocity.xV = 0
+    } else {
+      ball.pos.x < 0 ? (ball.velocity.xV += ball.friction) : (ball.velocity.xV -= ball.friction)
+    }
+
+    // logic for the rest of the bouncing
+    if (ball.pos.y < heightStopTop) (ball.pos.y = heightStopTop), (ball.velocity.yV *= -ball.bounce)
+    if (ball.pos.x > widthStopRight)
+      (ball.pos.x = widthStopRight), (ball.velocity.xV *= -ball.bounce)
+
+    if (ball.pos.x < widthtStopLeft)
+      (ball.pos.x = widthtStopLeft), (ball.velocity.xV *= -ball.bounce)
+
+    ball.move(ball.velocity)
   }
 }
